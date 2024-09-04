@@ -9,14 +9,14 @@ import SwiftUI
 
 struct ProgressBar: View {
     @Binding var progress: Int
-    @Binding var cards: [Card]
+    var total: Int
     
     var body: some View {
-        ProgressView(value: Double(progress), total: Double(cards.count))
+        ProgressView(value: Double(progress), total: Double(total))
             .padding()
     }
 }
 
 #Preview {
-    ProgressBar(progress: .constant(1), cards: .constant(testCards))
+    ProgressBar(progress: .constant(1), total: 2)
 }

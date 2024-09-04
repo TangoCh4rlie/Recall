@@ -14,22 +14,38 @@ struct PlayerView: View {
         }
     }
     @State private var isFaceUp: Bool = false
-    @Binding var cards: [Card]
+    @Binding var review: Review
+    
+    var total: Int {
+        return review.cards.count
+    }
     
     var body: some View {
-        VStack {
-            ProgressBar(progress: $progress, cards: $cards)
-            Spacer()
-            CardView(isFaceUp: $isFaceUp, card: $cards[Array<Card>.Index(progress)])
-            Spacer()
-            ActionsButtons(progress: $progress, isFaceUp: $isFaceUp)
-        }
-        .onChange(of: progress) {
-            isFaceUp = false
+        if progress < total {
+            VStack {
+                ProgressBar(progress: $progress, total: total)
+                HStack {
+                    Text("Question : \(progress) / \(total)")
+                    Spacer()
+                    
+                }
+                .padding()
+                Spacer()
+                
+                CardView(isFaceUp: $isFaceUp, card: $review.cards[progress])
+                
+                Spacer()
+                ActionsButtons(progress: $progress, isFaceUp: $isFaceUp)
+            }
+            .onChange(of: progress) {
+                isFaceUp = false
+            }
+        } else {
+            ContentView()
         }
     }
 }
 
 #Preview {
-    PlayerView(cards: .constant(testCards))
+    PlayerView(review: .constant(review1))
 }
